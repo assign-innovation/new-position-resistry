@@ -10,6 +10,30 @@
  
         </style>
 
+        <script>
+            // define the callAPI function that takes a first name and last name as parameters
+            var callAPI = (pic,company)=>{
+                // instantiate a headers object
+                var myHeaders = new Headers();
+                // add content type header to object
+                myHeaders.append("Content-Type", "application/json");
+                // using built in JSON utility package turn object to string and store in a variable
+                var raw = JSON.stringify({"pic":pic,"company":company});
+                // create a JSON object with parameters for API call and store in a variable
+                var requestOptions = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                // make API call with parameters and use promises to get response
+                fetch("https://vh156x0f2a.execute-api.ap-northeast-1.amazonaws.com/Prod", requestOptions)
+                .then(response => response.text())
+                .then(result => alert(JSON.parse(result).body))
+                .catch(error => console.log('error', error));
+            }
+        </script>
+
     </head>
 
     <body>
@@ -33,7 +57,7 @@
                 </tr>
                 <tr>
                     <td align="right">企業名：</td>
-                    <td><input type="text"></td>
+                    <td><input type="text" id="company"></td>
                 </tr>
                 <tr>
                     <td align="right">人事担当者・連絡先：</td>
@@ -107,7 +131,7 @@
                 </tr>
 
             </table>
-            <button onclick="alert('内容を送信しますか？')">送信</button>
+            <button onclick="callAPI(document.getElementById('pic').value,document.getElementById('company').value)">送信</button>
 
             
 
